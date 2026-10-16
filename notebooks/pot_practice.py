@@ -1,0 +1,27 @@
+from src.data import (download_prices,calculate_returns,annualized_returns,annualized_covariance)
+from src.portfolio import (portfolio_return,portfolio_variance,portfolio_volatility)
+from src.optimization import minimum_variance_portfolio,minimum_variance_kkt,minimum_variance_long_only
+import numpy as np
+tickers=["AAPL","MSFT","NVDA","GOOGL","AMZN"]
+prices=download_prices(tickers,start="2021-01-01",end="2026-01-01")
+returns=calculate_returns(prices)
+mu=annualized_returns(returns)
+sigma=annualized_covariance(returns)
+weights = minimum_variance_long_only(sigma.values)
+expected_return=portfolio_return(weights,mu.values)
+expected_variance=portfolio_variance(weights,sigma.values)
+expected_volatility=portfolio_volatility(weights,sigma.values)
+print("\nTickers:",tickers)
+print("\nWeights",weights)
+print("\nExpected Annual Return:",expected_return)
+print("\nExpected Annual Variance",expected_variance)
+print("\nExpected Annual Volatility",expected_volatility)
+print("\nMinimum-variance weights:")
+for ticker, weight in zip(tickers, weights):
+    print(f"{ticker}: {weight:.4%}")
+print("\nWeight sum:")
+print(weights.sum())
+print("\nExpected return:")
+print(portfolio_return(weights,mu.values))
+print("\nVolatility:")
+print(portfolio_volatility(weights,sigma.values))
