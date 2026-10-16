@@ -23,12 +23,12 @@ $$w^* = \frac{\Sigma^{-1}\mathbf{1}}{\mathbf{1}^\top \Sigma^{-1}\mathbf{1}}$$
 
 This is implemented in two ways: through the closed-form expression, and by solving the KKT system directly:
 
-$$
+```math
 \begin{bmatrix} \Sigma & -\mathbf{1} \\ \mathbf{1}^\top & 0 \end{bmatrix}
 \begin{bmatrix} w \\ \lambda \end{bmatrix}
 =
 \begin{bmatrix} \mathbf{0} \\ 1 \end{bmatrix}
-$$
+```
 
 A test confirms that both give the same weights. Neither version forms $\Sigma^{-1}$ explicitly; both use `np.linalg.solve`.
 
@@ -46,12 +46,12 @@ The cost is $2^n - 1$ linear solves for $n$ assets, which is fine for 5 to 10 as
 
 The same approach, with an additional constraint $\mu^\top w = R^*$:
 
-$$
+```math
 \begin{bmatrix} \Sigma & -\mathbf{1} & -\mu \\ \mathbf{1}^\top & 0 & 0 \\ \mu^\top & 0 & 0 \end{bmatrix}
 \begin{bmatrix} w \\ \lambda \\ \gamma \end{bmatrix}
 =
 \begin{bmatrix} \mathbf{0} \\ 1 \\ R^* \end{bmatrix}
-$$
+```
 
 Without short selling, the portfolio return is a weighted average of the asset returns, so any target outside $[\min_i \mu_i, \max_i \mu_i]$ is rejected immediately. Subsets that make the KKT matrix singular (a single asset, or two assets with equal $\mu$) are skipped.
 
